@@ -1,6 +1,6 @@
 {
   "name": "easy-mina-deploy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Deployment made easy for Mina Smart Contracts",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devarend/easy-mina-deploy.git"
+  },
+  "bin": {
+    "easy-mina-deploy": "index.js"
   },
   "keywords": [
     "mina",

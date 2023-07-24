@@ -1,0 +1,26 @@
+{
+  "name": "easy-mina-deploy",
+  "version": "1.0.0",
+  "description": "Deployment made easy for Mina Smart Contracts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devarend/easy-mina-deploy.git"
+  },
+  "keywords": [
+    "mina",
+    "smart",
+    "contracts",
+    "deploy",
+    "deployment"
+  ],
+  "author": "DevArend",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/devarend/easy-mina-deploy/issues"
+  },
+  "homepage": "https://github.com/devarend/easy-mina-deploy#readme"
+}

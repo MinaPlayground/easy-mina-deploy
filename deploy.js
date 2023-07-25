@@ -1,10 +1,14 @@
-const {Mina, PrivateKey, fetchAccount, AccountUpdate} = require("snarkyjs");
+const deploySmartContract = async (path, feePayer, zkApp) => {
+    const snarkyjsImportPath = `${process.cwd()}/node_modules/snarkyjs/dist/node/index.js`;
+    const { PrivateKey, Mina, AccountUpdate, fetchAccount } = await import(snarkyjsImportPath);
 
-const deploySmartContract = async (path) => {
     let Berkeley = Mina.Network('https://berkeley.minascan.io/graphql');
     Mina.setActiveInstance(Berkeley);
 
-    let feePayerKey = PrivateKey.random()
+    // let feePayerKey = PrivateKey.random()
+    let feePayerKey = PrivateKey.fromBase58(
+        feePayer
+    );
     let feePayerAddress = feePayerKey.toPublicKey();
     let response = await fetchAccount({publicKey: feePayerAddress});
     if (response.error) throw Error(response.error.statusText);
@@ -14,7 +18,7 @@ const deploySmartContract = async (path) => {
 
     let transactionFee = 100_000_000;
 
-    const {Add} = await import(path)
+    const {Add} = await import(`${process.cwd()}/${path}`)
 
     let {verificationKey} = await Add.compile();
 
@@ -29,6 +33,7 @@ const deploySmartContract = async (path) => {
     );
 
     await transaction.sign([feePayerKey, zkappKey]).send();
+    console.log(zkappAddress.toBase58())
 }
 
 module.exports = {

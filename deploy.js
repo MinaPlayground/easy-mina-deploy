@@ -1,30 +1,30 @@
-const deploySmartContract = async (path, feePayer, zkApp) => {
+const deploySmartContract = async (path, className, customFeePayerKey, customZkAppKey) => {
     const snarkyjsImportPath = `${process.cwd()}/node_modules/snarkyjs/dist/node/index.js`;
-    const { PrivateKey, Mina, AccountUpdate, fetchAccount } = await import(snarkyjsImportPath);
-
-    let Berkeley = Mina.Network('https://berkeley.minascan.io/graphql');
+    const {PrivateKey, Mina, AccountUpdate, fetchAccount} = await import(snarkyjsImportPath);
+    const Berkeley = Mina.Network('https://berkeley.minascan.io/graphql');
     Mina.setActiveInstance(Berkeley);
 
-    // let feePayerKey = PrivateKey.random()
-    let feePayerKey = PrivateKey.fromBase58(
-        feePayer
-    );
-    let feePayerAddress = feePayerKey.toPublicKey();
-    let response = await fetchAccount({publicKey: feePayerAddress});
+    const feePayerKey = customFeePayerKey ? PrivateKey.fromBase58(customFeePayerKey) : PrivateKey.random();
+    const feePayerAddress = feePayerKey.toPublicKey();
+    const response = await fetchAccount({publicKey: feePayerAddress});
     if (response.error) throw Error(response.error.statusText);
 
-    let zkappKey = PrivateKey.random()
-    let zkappAddress = zkappKey.toPublicKey();
+    const zkappKey = customZkAppKey ? PrivateKey.fromBase58(customZkAppKey) : PrivateKey.random();
+    const zkappAddress = zkappKey.toPublicKey();
 
-    let transactionFee = 100_000_000;
+    const transactionFee = 100_000_000;
 
-    const {Add} = await import(`${process.cwd()}/${path}`)
+    const smartContract = await import(`${process.cwd()}/${path}`);
 
-    let {verificationKey} = await Add.compile();
+    if (!(className in smartContract)) {
+        console.error(`Failed to find the "${className}" smart contract in your build directory.\n Check that you have exported your smart contract class using a named export and try again.`);
+        process.exit(1);
+    }
+    const smartContractClass = smartContract[className]
+    const {verificationKey} = await smartContractClass.compile();
+    const zkapp = new smartContractClass(zkappAddress);
 
-    let zkapp = new Add(zkappAddress);
-
-    let transaction = await Mina.transaction(
+    const transaction = await Mina.transaction(
         {sender: feePayerAddress, fee: transactionFee},
         () => {
             AccountUpdate.fundNewAccount(feePayerAddress);

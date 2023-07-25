@@ -11,20 +11,23 @@ yargs.command({
             demandOption: true,
             type: 'string',
         },
+        className: {
+            describe: 'Class name of the Smart Contract you want to deploy',
+            demandOption: true,
+            type: 'string',
+        },
         feePayerKey: {
             describe: 'Private key of the fee payer',
-            demandOption: true,
             type: 'string',
         },
         zkAppKey: {
             describe: 'Private key of the zkApp',
-            demandOption: true,
             type: 'string',
         },
     },
     async handler(argv) {
-        const {path, feePayerKey, zkAppKey} = argv
-        await deploySmartContract(path, feePayerKey, zkAppKey)
+        const {path, className, feePayerKey, zkAppKey} = argv
+        await deploySmartContract(path, className, feePayerKey, zkAppKey)
     },
 });
 

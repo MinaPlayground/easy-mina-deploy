@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 const yargs = require('yargs');
+const { hideBin } = require('yargs/helpers');
 const {deploySmartContract} = require("./deploy");
 
-yargs.command({
+yargs(hideBin(process.argv)).command({
     command: 'deploy',
     describe: 'Deploy a Smart Contract',
     builder: {
@@ -29,6 +30,6 @@ yargs.command({
         const {path, className, feePayerKey, zkAppKey} = argv
         await deploySmartContract(path, className, feePayerKey, zkAppKey)
     },
-});
+}).strict();
 
 yargs.parse();

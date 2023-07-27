@@ -1,10 +1,18 @@
-const logMessages = (info, details) => {
-    console.log(`Info: ${info}`);
-    console.log(`Details: ${details}`);
+const logInfo = (message, details) => {
+    const infoObj = {
+        type: 'info',
+        message,
+        details
+    }
+    console.log(JSON.stringify(infoObj));
 }
 
-const throwError = (error) => {
-    console.log(`Error: ${error}`);
+const throwError = (message) => {
+    const errorObj = {
+        type: 'error',
+        message
+    }
+    console.log(JSON.stringify(errorObj));
     process.exit(1);
 }
 
@@ -18,12 +26,7 @@ const deploySmartContract = async (path, className, customFeePayerKey, customZkA
     const feePayerAddress = feePayerKey.toPublicKey();
     const response = await fetchAccount({publicKey: feePayerAddress});
     if (response.error) {
-        const feePayerKeys = {
-            feePayerPublicKey: feePayerAddress.toBase58(),
-            feePayerPrivateKey: feePayerKey.toBase58()
-        }
-        logMessages(`Please fund the following address: ${feePayerAddress.toBase58()}`, JSON.stringify(feePayerKeys));
-        throwError('Fee payer not found');
+        throwError(`Fee payer not found, please fund the following address: ${feePayerAddress.toBase58()}`);
     }
 
     const zkappKey = customZkAppKey ? PrivateKey.fromBase58(customZkAppKey) : PrivateKey.random();
@@ -47,9 +50,9 @@ const deploySmartContract = async (path, className, customFeePayerKey, customZkA
                 zkapp.deploy({verificationKey});
             }
         );
-        const {isSuccess, hash} = await transaction.sign([feePayerKey, zkappKey]).send();
+        const {isSuccess, hash} = await transaction.sign([zkappKey, feePayerKey]).send();
         if (isSuccess) {
-            logMessages(`Deployment successful`, JSON.stringify({transactionHash: hash()}));
+            logInfo(`Deployment successful`, hash())
         }
     } catch (e) {
         throwError(e.message);

@@ -17,8 +17,8 @@ const throwError = (message) => {
 }
 
 const deploySmartContract = async (path, className, customFeePayerKey, customZkAppKey) => {
-    const snarkyjsImportPath = `${process.cwd()}/node_modules/snarkyjs/dist/node/index.js`;
-    const {PrivateKey, Mina, AccountUpdate, fetchAccount} = await import(snarkyjsImportPath);
+    const o1jsImportPath = `${process.cwd()}/node_modules/o1js/dist/node/index.js`;
+    const {PrivateKey, Mina, AccountUpdate, fetchAccount} = await import(o1jsImportPath);
     const Berkeley = Mina.Network('https://berkeley.minascan.io/graphql');
     Mina.setActiveInstance(Berkeley);
 

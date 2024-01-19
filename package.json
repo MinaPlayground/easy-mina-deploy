@@ -1,6 +1,6 @@
 {
   "name": "easy-mina-deploy",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Deployment made easy for Mina Smart Contracts",
   "main": "index.js",
   "scripts": {

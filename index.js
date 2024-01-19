@@ -8,13 +8,17 @@ yargs(hideBin(process.argv)).command({
     describe: 'Deploy a Smart Contract',
     builder: {
         path: {
-            describe: 'Path of your Smart Contract',
+            describe: 'Path of your Smart Contract file',
             demandOption: true,
             type: 'string',
         },
         className: {
             describe: 'Class name of the Smart Contract you want to deploy',
             demandOption: true,
+            type: 'string',
+        },
+        contractPath: {
+            describe: 'Path of your Smart Contract',
             type: 'string',
         },
         feePayerKey: {
@@ -27,8 +31,8 @@ yargs(hideBin(process.argv)).command({
         },
     },
     async handler(argv) {
-        const {path, className, feePayerKey, zkAppKey} = argv
-        await deploySmartContract(path, className, feePayerKey, zkAppKey)
+        const {path, className, feePayerKey, zkAppKey, contractPath} = argv
+        await deploySmartContract(path, className, feePayerKey, zkAppKey, contractPath)
     },
 }).strict();
 

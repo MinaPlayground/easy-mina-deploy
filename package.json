@@ -1,6 +1,6 @@
 {
   "name": "easy-mina-deploy",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Deployment made easy for Mina Smart Contracts",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/devarend/easy-mina-deploy#readme",
   "dependencies": {
-    "o1js": "^0.15.*",
+    "o1js": "0.16.*",
     "yargs": "^17.7.2"
   }
 }
